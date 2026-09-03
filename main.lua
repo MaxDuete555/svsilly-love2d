@@ -1,16 +1,20 @@
 local Player = require("player")
-local Hitboxes = require("hitboxes")
+--
+local M = require("menace")
+local Asteroid = M.Asteroid
+local DeathZone = M.DeathZone
 local Flags = require("flags")
 local SFX = require("sfx")
 local tiempo=0
 local mejortiempo = math.huge
 local active=true
 local paused =false
-local p, hb, fg, sfx
+local p, ast, dz, fg, sfx
 
 function love.load()
     p = Player.new(450, 500)
-    hb = Hitboxes.new(p)
+    ast = M.Asteroid:new(p)
+    dz  = M.DeathZone:new(p, 200, 200, 64, 64)
     fg = Flags.new()
     sfx = SFX.new()
 end
@@ -24,7 +28,8 @@ end
 function love.update(dt)
     if not paused then
         p:update(dt)
-        hb:update(dt)
+        ast:update(dt)
+        dz:update(dt)
         fg:update(dt, hb)
         tiempo = tiempo + dt
     end
@@ -40,7 +45,8 @@ end
 
 function love.draw()
     p:draw()
-    hb:draw()
+    ast:draw()
+    dz:draw()
     fg:draw()
      love.graphics.print(string.format("Tiempo actual: %.2f", tiempo), 550, 0)
     love.graphics.print(string.format("Mejor tiempo: %.2f", mejorTiempo), 550, 20)

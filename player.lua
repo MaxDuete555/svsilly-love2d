@@ -1,5 +1,6 @@
 --Tabla--
 local Player = {}
+Player.__index = Player
 
 function Player.new(x, y)
 
@@ -21,8 +22,11 @@ function Player.new(x, y)
             }
         }
     }
+    setmetatable(self, Player)
+    return self
+end
     --Actualización jugador
-    function self:update(dt)
+    function Player:update(dt)
         local moving = false
 
         if love.keyboard.isDown("left") then
@@ -43,7 +47,7 @@ function Player.new(x, y)
             moving = true
         end
 
-        -- 🎞️ Animación de la secuencia frontal
+        --Animación de Pfront
         if self.dir == "front" and moving then
             self.timer = self.timer + dt
             if self.timer > 0.15 then
@@ -59,15 +63,12 @@ function Player.new(x, y)
     end
 
 --Renderizacon Jugador--
-    function self:draw()
-        if self.dir == "front" then
-            love.graphics.draw(self.sprites.front[self.frame], self.x, self.y)
-        else
-            love.graphics.draw(self.sprites[self.dir], self.x, self.y)
-        end
+function Player:draw()
+    if self.dir == "front" then
+        love.graphics.draw(self.sprites.front[self.frame], self.x, self.y)
+    else
+        love.graphics.draw(self.sprites[self.dir], self.x, self.y)
     end
-
-    return self
 end
 
 return Player
