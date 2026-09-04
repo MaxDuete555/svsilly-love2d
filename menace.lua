@@ -35,7 +35,7 @@ local Asteroid = setmetatable({}, {__index = Menace})
 Asteroid.__index = Asteroid
 
 function Asteroid:new(player)
-    local self = Menace:new(player, 700, 0, 64, 64) -- 👈 Spawnea en (700,0)
+    local self = Menace:new(player, 700, 0, 64, 64)
     setmetatable(self, Asteroid)
 
     self.sprites = {
@@ -47,13 +47,12 @@ function Asteroid:new(player)
 
     self.frame = 1
     self.timer = 0
-    self.vx = -100   -- velocidad horizontal (izquierda)
-    self.vy = 200    -- velocidad vertical (abajo)
+    self.vx = -100   
+    self.vy = 200   
     return self
 end
 
 function Asteroid:update(dt)
-    -- Movimiento diagonal
     self.zone.x = self.zone.x + self.vx * dt
     self.zone.y = self.zone.y + self.vy * dt
     self.timer = self.timer + dt
