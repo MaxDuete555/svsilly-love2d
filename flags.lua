@@ -10,16 +10,16 @@ function Flags.new()
     }
 
 --Carga Interaccion--
-    function self:update(dt, hitboxes)
-        if hitboxes.gameVick then
+    function self:update(dt, dz)
+        if dz.gameVick then
             self.vick = true
             self.lost = false
-        elseif hitboxes.gameLost then
+        elseif dz.gameLost then
             self.lost = true
             self.vick = false
             self.resetTimer = self.resetTimer + dt
             if self.resetTimer >= self.resetDelay then
-                hitboxes.gameLost = false
+                dz.gameLost = false
                 self.resetTimer = 0
             end
         end

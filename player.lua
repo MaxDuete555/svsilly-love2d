@@ -1,4 +1,5 @@
 --Tabla--
+--Clase jugador--
 local Player = {}
 Player.__index = Player
 

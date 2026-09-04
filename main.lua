@@ -30,11 +30,11 @@ function love.update(dt)
         p:update(dt)
         ast:update(dt)
         dz:update(dt)
-        fg:update(dt, hb)
+        fg:update(dt, dz, ast)
         tiempo = tiempo + dt
     end
 
-    if hb.gameLost then
+    if dz.gameLost then
             sfx:playLose()
         end
 
