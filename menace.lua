@@ -63,7 +63,7 @@ function Asteroid:update(dt)
 
     -- Reinicio--
     if self.zone.y > love.graphics.getHeight() + 50 or self.zone.x < -64 then
-        self.zone.x = 700
+        self.zone.x = math.random(0, love.graphics.getWidth())
         self.zone.y = 0
     end
     
@@ -90,4 +90,56 @@ function DeathZone:new(player, x, y, w, h)
     return self
 end
 
-return {Menace=Menace, Asteroid=Asteroid, DeathZone=DeathZone}
+--Subclase Explosion--
+local Explosion = setmetatable({}, {__index = Menace})
+Explosion.__index = Explosion
+
+function Explosion:new(Player)
+    local self = Menace:new(Player, 502, 100, 64, 64)
+    setmetatable(self, Explosion)
+    
+    self.sprites = {
+    love.graphics.newImage("sprites/Explosion1.png"),
+    love.graphics.newImage("sprites/Explosion2.png"),
+    love.graphics.newImage("sprites/Explosion3.png")
+}
+
+    self.frame = 1
+    self.timer = 0
+    return self
+end
+
+function Explosion:update(dt)
+    self.timer = self.timer + dt
+    if self.timer > 0.15 then
+        self.frame = self.frame % #self.sprites + 1
+    end
+
+    if self.timer >= 3 then
+        self.zone.x = math.random(0, love.graphics.getWidth() - self.zone.w)
+        self.zone.y = math.random(0, love.graphics.getWidth() - self.zone.w)
+        self.timer = 0
+    end
+
+    --Reinicio--
+   if self.timer >= 3 then
+        self.zone.x = math.random(0, love.graphics.getWidth() - self.zone.w)
+        self.zone.y = 0
+        self.timer = 0
+    end
+
+    if self:collide() then
+        self.player.x = 450
+        self.player.y = 500
+        self.gameLost = true
+        self.gameWon  = false
+
+    end
+
+end
+
+function Explosion:draw()
+    love.graphics.draw(self.sprites[self.frame], self.zone.x, self.zone.y)
+end
+
+return {Menace=Menace, Asteroid=Asteroid, DeathZone=DeathZone, Explosion=Explosion}
