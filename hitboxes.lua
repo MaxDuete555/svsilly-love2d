@@ -46,14 +46,17 @@ function Hitboxes.new(player)
         end
 
         if collide(playerHitbox, self.defeatZone) then
-            self.player.x = self.startX
-            self.player.y = self.startY
-            self.gameLost = true
-            self.gameWon = false
-        elseif collide(playerHitbox, self.goalZone) then
-            self.gameWon = true
-            self.gameLost = false
-        end
+    if not self.gameLost then
+        self.player.x = self.startX
+        self.player.y = self.startY
+        self.gameLost = true
+        self.gameWon = false
+    end
+
+elseif collide(playerHitbox, self.goalZone) then
+    self.gameWon = true
+    self.gameLost = false
+end
     end
 
     --Dibujo

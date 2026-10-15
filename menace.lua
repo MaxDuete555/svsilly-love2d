@@ -97,49 +97,74 @@ Explosion.__index = Explosion
 function Explosion:new(Player)
     local self = Menace:new(Player, 502, 100, 64, 64)
     setmetatable(self, Explosion)
-    
+
     self.sprites = {
-    love.graphics.newImage("sprites/Explosion1.png"),
-    love.graphics.newImage("sprites/Explosion2.png"),
-    love.graphics.newImage("sprites/Explosion3.png")
-}
+        love.graphics.newImage("sprites/Explosion1.png"),
+        love.graphics.newImage("sprites/Explosion2.png"),
+        love.graphics.newImage("sprites/Explosion3.png")
+    }
 
     self.frame = 1
-    self.timer = 0
+
+    self.animTimer = 0
+    self.spawnTimer = 0
+
+    self.active = false
+
     return self
 end
 
 function Explosion:update(dt)
-    self.timer = self.timer + dt
-    if self.timer > 0.15 then
+
+    if not self.active then
+        return
+    end
+
+    self.animTimer = self.animTimer + dt
+
+    if self.animTimer > 0.15 then
         self.frame = self.frame % #self.sprites + 1
+        self.animTimer = 0
     end
 
-    if self.timer >= 3 then
-        self.zone.x = math.random(0, love.graphics.getWidth() - self.zone.w)
-        self.zone.y = math.random(0, love.graphics.getWidth() - self.zone.w)
-        self.timer = 0
-    end
+    self.spawnTimer = self.spawnTimer + dt
 
-    --Reinicio--
-   if self.timer >= 3 then
-        self.zone.x = math.random(0, love.graphics.getWidth() - self.zone.w)
-        self.zone.y = 0
-        self.timer = 0
+    if self.spawnTimer >= 3 then
+
+        self.zone.x = math.random(
+            0,
+            love.graphics.getWidth() - self.zone.w
+        )
+
+        self.zone.y = math.random(
+            0,
+            love.graphics.getHeight() - self.zone.h
+        )
+
+        self.spawnTimer = 0
     end
 
     if self:collide() then
+
         self.player.x = 450
         self.player.y = 500
+
         self.gameLost = true
-        self.gameWon  = false
-
+        self.gameWon = false
     end
-
 end
 
 function Explosion:draw()
-    love.graphics.draw(self.sprites[self.frame], self.zone.x, self.zone.y)
+
+    if not self.active then
+        return
+    end
+
+    love.graphics.draw(
+        self.sprites[self.frame],
+        self.zone.x,
+        self.zone.y
+    )
 end
 
 return {Menace=Menace, Asteroid=Asteroid, DeathZone=DeathZone, Explosion=Explosion}
