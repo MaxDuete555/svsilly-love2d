@@ -1,4 +1,4 @@
-
+--HUD--
 local hud = {}
 hud.__index = hud
 
@@ -27,7 +27,7 @@ function hud:draw()
     )
 end
 
--- SUBCLASE: TIMER
+--Timer--
 local timer = setmetatable({}, {__index = hud})
 timer.__index = timer
 
